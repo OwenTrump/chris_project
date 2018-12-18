@@ -1,0 +1,47 @@
+CC = gcc 
+INCLUDE = -I ./src
+RM = rm -r 
+CFLAGS = $(INCLUDE) -std=gnu11 -Werror -g -pg 
+LIBS = -lm 
+LIBFLAGS = -L/usr/lib
+SRCFILES = input_stream.c prim.c calc_error.c dict.c term.c expr.c
+MAINFILE = main.c
+OBJ = $(addprefix debug/,$(subst .c,.o,$(SRCFILES))) 
+DIR = debug 
+SRCDIR = src 
+EXEC = calc_dbg 
+
+.PHONY: all clean
+
+all:$(EXEC)
+
+$(EXEC):$(OBJ) main.o
+	$(CC) -o $@ $^  $(LIBFLAGS) $(LIBS) 
+
+debug/input_stream.o:src/input_stream.c
+	$(CC) -c -o $@ $^ $(CFLAGS)
+
+debug/prim.o:src/prim.c
+	$(CC) -c -o $@ $^ $(CFLAGS)
+	
+debug/calc_error.o:src/calc_error.c
+	$(CC) -c -o $@ $^ $(CFLAGS)
+
+debug/dict.o:src/dict.c
+	$(CC) -c -o $@ $^ $(CFLAGS) 
+
+debug/term.o:src/term.c
+	$(CC) -c -o $@ $^ $(CFLAGS)
+
+debug/expr.o:src/expr.c
+	$(CC) -c -o $@ $^ $(CFLAGS)
+
+main.o:$(MAINFILE)
+	$(CC) -c -o $@ $^ $(CFLAGS)
+
+
+clean:
+	$(RM) $(DIR)/*.o
+	
+
+
